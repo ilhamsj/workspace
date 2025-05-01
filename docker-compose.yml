@@ -13,19 +13,22 @@ services:
       - ./nginx/rp/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/rp/web:/etc/nginx/web
       - ./logs/rp:/var/log/nginx
+    restart: unless-stopped
     depends_on:
       - wordpress-nginx
+      - frontend
+      - adminer
     networks:
       - universe
 
   frontend:
     container_name: frontend
-    image: media-frontend:latest
+    build:
+      context: ${WORKSPACE_DIR}/frontend
     working_dir: /usr/src/app
     volumes:
-      - ${WORKSPACE_DIR}/media-frontend:/usr/src/app
-      - /usr/src/app/node_modules
-    command: sh -c "npm ci --legacy-peer-deps && npm run dev"
+      - ${WORKSPACE_DIR}/frontend:/usr/src/app
+    command: [ "npm", "run", "dev" ]
     environment:
       - NODE_ENV
     networks:
@@ -48,7 +51,8 @@ services:
 
   wordpress:
     container_name: wordpress
-    image: registry.ilhamjs.io/wordpress:0.0.1-arm64
+    build:
+      context: ${WORKSPACE_DIR}/wordpress
     volumes:
       - ${WORKSPACE_DIR}/wordpress-custom-plugin:/var/www/public/wp-content/plugins/wordpress-custom-plugin
       - ${WORKSPACE_DIR}/wordpress-custom-theme:/var/www/public/wp-content/themes/wordpress-custom-theme
@@ -80,13 +84,9 @@ services:
       - universe
 
   adminer:
-    profiles:
-      - adminer
     image: adminer:latest
     container_name: adminer
     restart: unless-stopped
-    ports:
-      - 8084:8080
     networks:
       - universe
     depends_on:
