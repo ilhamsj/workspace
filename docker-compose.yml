@@ -57,6 +57,7 @@ services:
       - ${WORKSPACE_DIR}/wordpress-custom-plugin:/var/www/public/wp-content/plugins/wordpress-custom-plugin
       - ${WORKSPACE_DIR}/wordpress-custom-theme:/var/www/public/wp-content/themes/wordpress-custom-theme
       - ${WORKSPACE_DIR}/wordpress:/var/www:cached
+      - ./logs/wordpress/debug.log:/var/www/public/wp-content/debug.log
     environment:
       - DB_NAME=${MYSQL_DATABASE}
       - DB_USER=${MYSQL_USER}
