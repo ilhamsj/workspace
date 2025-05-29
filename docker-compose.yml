@@ -149,7 +149,10 @@ services:
       - N8N_PROTOCOL=http
       - N8N_PATH=/n8n/
       - N8N_TRUST_PROXY=true
+      - N8N_SECURE_COOKIE=${N8N_SECURE_COOKIE}
     volumes:
       - ./data/n8n:/home/node/.n8n
     networks:
       - universe
+    depends_on:
+      - postgres
