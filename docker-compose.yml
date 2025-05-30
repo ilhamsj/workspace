@@ -54,10 +54,12 @@ services:
     build:
       context: ${WORKSPACE_DIR}/wordpress
     volumes:
+      - ${WORKSPACE_DIR}/wordpress-custom-sync:/var/www/public/wp-content/plugins/wordpress-custom-sync
       - ${WORKSPACE_DIR}/wordpress-custom-plugin:/var/www/public/wp-content/plugins/wordpress-custom-plugin
       - ${WORKSPACE_DIR}/wordpress-custom-theme:/var/www/public/wp-content/themes/wordpress-custom-theme
-      - ${WORKSPACE_DIR}/wordpress:/var/www:cached
+      - ${WORKSPACE_DIR}/wordpress:/var/www
       - ./logs/wordpress/debug.log:/var/www/public/wp-content/debug.log
+      # - ./logs/wordpress/monolog:/var/log/wordpress
     environment:
       - DB_NAME=${MYSQL_DATABASE}
       - DB_USER=${MYSQL_USER}
@@ -65,6 +67,16 @@ services:
       - DB_HOST=${MYSQL_HOST}
     depends_on:
       - mysql
+    networks:
+      - universe
+
+  wordpress-cron:
+    container_name: wordpress-cron
+    build:
+      context: ./cron
+    depends_on:
+      - wordpress
+      - wordpress-nginx
     networks:
       - universe
 
