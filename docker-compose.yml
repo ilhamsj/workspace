@@ -65,10 +65,8 @@ services:
     build:
       context: ${WORKSPACE_DIR}/wordpress
     volumes:
-      - ${WORKSPACE_DIR}/wordpress-custom-sync:/var/www/public/wp-content/plugins/wordpress-custom-sync
-      - ${WORKSPACE_DIR}/wordpress-custom-plugin:/var/www/public/wp-content/plugins/wordpress-custom-plugin
-      - ${WORKSPACE_DIR}/wordpress-custom-theme:/var/www/public/wp-content/themes/wordpress-custom-theme
       - ${WORKSPACE_DIR}/wordpress:/var/www
+      - ${WORKSPACE_DIR}/wordpress-meilisearch:/var/www/public/wp-content/plugins/wordpress-meilisearch
       - ./logs/wordpress/debug.log:/var/www/public/wp-content/debug.log
       - ./logs/wordpress/monolog:/var/log/wordpress
     environment:
