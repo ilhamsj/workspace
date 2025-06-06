@@ -3,6 +3,19 @@ networks:
     driver: bridge
 
 services:
+
+  backend:
+    container_name: backend
+    build:
+      context: ${WORKSPACE_DIR}/backend
+    volumes:
+      - ${WORKSPACE_DIR}/backend:/usr/src/app
+    environment:
+      - NODE_ENV
+    command: [ "npm", "run", "start:dev" ]
+    networks:
+      - universe
+
   rp:
     container_name: rp
     image: nginx:latest
@@ -36,18 +49,16 @@ services:
 
   wordpress-nginx:
     container_name: wordpress-nginx
-    image: nginx:latest
+    build:
+      context: ${WORKSPACE_DIR}/wordpress
+      dockerfile: Dockerfile.nginx
     volumes:
       - ${WORKSPACE_DIR}/wordpress:/var/www
-      - ./nginx/wordpress/default.conf:/etc/nginx/conf.d/default.conf
-      - ./nginx/wordpress/nginx.conf:/etc/nginx/nginx.conf
       - ./logs/wordpress-nginx:/var/log/nginx
     depends_on:
       - wordpress
     networks:
       - universe
-    extra_hosts:
-      - "local.wordpress.test:${HOST_IP}"
 
   wordpress:
     container_name: wordpress
