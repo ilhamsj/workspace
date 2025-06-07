@@ -4,6 +4,20 @@ networks:
 
 services:
 
+  strapi:
+    container_name: strapi
+    build:
+      context: ${WORKSPACE_DIR}/strapi-project
+    volumes:
+      - ${WORKSPACE_DIR}/strapi-project:/usr/src/app
+    environment:
+      - NODE_ENV
+    command: ["yarn", "dev"]
+    ports:
+      - 1337:1337
+    networks:
+      - universe
+
   backend:
     container_name: backend
     build:
@@ -18,13 +32,16 @@ services:
 
   rp:
     container_name: rp
-    image: nginx:latest
+    build:
+      context: ./nginx/rp
+      dockerfile: Dockerfile
     ports:
       - 80:80
     volumes:
-      - ./nginx/rp/conf.d/default.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/rp/conf.d:/etc/nginx/conf.d
       - ./nginx/rp/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/rp/web:/etc/nginx/web
+      - ./nginx/rp/includes:/etc/nginx/includes
       - ./logs/rp:/var/log/nginx
     restart: unless-stopped
     depends_on:
