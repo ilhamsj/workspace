@@ -7,14 +7,16 @@ services:
   strapi:
     container_name: strapi
     build:
-      context: ${WORKSPACE_DIR}/strapi-project
+      context: ${WORKSPACE_DIR}/strapi
     volumes:
-      - ${WORKSPACE_DIR}/strapi-project:/usr/src/app
+      - ${WORKSPACE_DIR}/strapi:/usr/src/app
     environment:
       - NODE_ENV
-    command: ["yarn", "dev"]
+    command: >
+      /bin/sh -c "yarn build && yarn start"
     ports:
       - 1337:1337
+      - 5173:5173
     networks:
       - universe
 
