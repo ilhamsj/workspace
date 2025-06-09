@@ -15,6 +15,7 @@ services:
     command: >
       /bin/sh -c "yarn build && yarn dev"
     ports:
+      - 1337:1337
       - 5173:5173
     networks:
       - universe
@@ -142,8 +143,8 @@ services:
       - "7700:7700"
     networks:
       - universe
-    volumes:
-      - ./data/meilisearch:/meili_data
+    # volumes:
+    #   - ./data/meilisearch:/meili_data
 
   minio:
     container_name: minio
