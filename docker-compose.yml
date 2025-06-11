@@ -18,11 +18,7 @@ services:
       context: ${WORKSPACE_DIR}/strapi
     volumes:
       - ${WORKSPACE_DIR}/strapi:/usr/src/app
-      - ${WORKSPACE_DIR}/strapi-plugin-meilisearch/LICENSE:/usr/src/app/node_modules/strapi-plugin-meilisearch/LICENSE
-      - ${WORKSPACE_DIR}/strapi-plugin-meilisearch/README.md:/usr/src/app/node_modules/strapi-plugin-meilisearch/README.md
       - ${WORKSPACE_DIR}/strapi-plugin-meilisearch/dist:/usr/src/app/node_modules/strapi-plugin-meilisearch/dist
-      - ${WORKSPACE_DIR}/strapi-plugin-meilisearch/node_modules:/usr/src/app/node_modules/strapi-plugin-meilisearch/node_modules
-      - ${WORKSPACE_DIR}/strapi-plugin-meilisearch/package.json:/usr/src/app/node_modules/strapi-plugin-meilisearch/package.json
     environment:
       - NODE_ENV
     command: >
