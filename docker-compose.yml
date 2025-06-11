@@ -4,21 +4,36 @@ networks:
 
 services:
 
+  strapi-meilisearch:
+    image: node:20
+    container_name: strapi-meilisearch
+    working_dir: /usr/src/app
+    volumes:
+      - ${WORKSPACE_DIR}/strapi-plugin-meilisearch:/usr/src/app
+    command: tail -f /dev/null
+
   strapi:
     container_name: strapi
     build:
       context: ${WORKSPACE_DIR}/strapi
     volumes:
       - ${WORKSPACE_DIR}/strapi:/usr/src/app
+      - ${WORKSPACE_DIR}/strapi-plugin-meilisearch/LICENSE:/usr/src/app/node_modules/strapi-plugin-meilisearch/LICENSE
+      - ${WORKSPACE_DIR}/strapi-plugin-meilisearch/README.md:/usr/src/app/node_modules/strapi-plugin-meilisearch/README.md
+      - ${WORKSPACE_DIR}/strapi-plugin-meilisearch/dist:/usr/src/app/node_modules/strapi-plugin-meilisearch/dist
+      - ${WORKSPACE_DIR}/strapi-plugin-meilisearch/node_modules:/usr/src/app/node_modules/strapi-plugin-meilisearch/node_modules
+      - ${WORKSPACE_DIR}/strapi-plugin-meilisearch/package.json:/usr/src/app/node_modules/strapi-plugin-meilisearch/package.json
     environment:
       - NODE_ENV
     command: >
-      /bin/sh -c "yarn build && yarn dev"
+      /bin/sh -c "yarn build && yarn develop"
     ports:
-      - 1337:1337
       - 5173:5173
     networks:
       - universe
+    depends_on:
+      - strapi-meilisearch
+      - meilisearch
 
   backend:
     container_name: backend
