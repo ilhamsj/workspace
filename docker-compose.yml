@@ -10,7 +10,8 @@ services:
     working_dir: /usr/src/app
     volumes:
       - ${WORKSPACE_DIR}/strapi-plugin-meilisearch:/usr/src/app
-    command: tail -f /dev/null
+    command: >
+      /bin/sh -c "yarn install && yarn build"
 
   strapi:
     container_name: strapi
@@ -28,7 +29,6 @@ services:
     networks:
       - universe
     depends_on:
-      - strapi-meilisearch
       - meilisearch
 
   backend:
