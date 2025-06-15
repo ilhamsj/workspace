@@ -48,8 +48,6 @@ services:
     build:
       context: ./nginx/rp
       dockerfile: Dockerfile
-    ports:
-      - 80:80
     volumes:
       - ./nginx/rp/conf.d:/etc/nginx/conf.d
       - ./nginx/rp/nginx.conf:/etc/nginx/nginx.conf
@@ -73,6 +71,8 @@ services:
     ports:
       - 443:443
     volumes:
+      - ./nginx/elb/conf.d:/etc/nginx/conf.d
+      - ./nginx/elb/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/elb/ssl:/etc/nginx/ssl
       - ./logs/elb:/var/log/nginx
     restart: unless-stopped
@@ -214,7 +214,7 @@ services:
       - DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD}
       - N8N_HOST=local.wordpress.test
       - N8N_PORT=80
-      - N8N_PROTOCOL=http
+      - N8N_PROTOCOL=https,http
       - N8N_PATH=/n8n/
       - N8N_TRUST_PROXY=true
       - N8N_SECURE_COOKIE=${N8N_SECURE_COOKIE}
