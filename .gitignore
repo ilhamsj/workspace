@@ -2,3 +2,4 @@ data
 logs
 scripts/
 .env
+ssl

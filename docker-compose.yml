@@ -65,6 +65,22 @@ services:
     networks:
       - universe
 
+  elb:
+    container_name: elb
+    build:
+      context: ./nginx/elb
+      dockerfile: Dockerfile
+    ports:
+      - 443:443
+    volumes:
+      - ./nginx/elb/ssl:/etc/nginx/ssl
+      - ./logs/elb:/var/log/nginx
+    restart: unless-stopped
+    depends_on:
+      - rp
+    networks:
+      - universe
+
   frontend:
     container_name: frontend
     build:
